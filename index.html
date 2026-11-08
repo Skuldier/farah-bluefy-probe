@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; media-src blob:; img-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Farah Pocket: Bluefy probe</title>
+  <link rel="stylesheet" href="probe.css">
+</head>
+<body>
+  <header>
+    <h1>Farah Pocket: Bluefy probe</h1>
+    <p class="note">Feasibility test only. This is not the Farah app: it never starts a voice session,
+      approves anything or runs tools. Nothing is uploaded or stored; results stay on this page.</p>
+  </header>
+
+  <section aria-labelledby="h-env">
+    <h2 id="h-env">1. Browser capabilities</h2>
+    <ul id="caps" class="caps"></ul>
+    <p class="small">User agent: <span id="ua"></span></p>
+  </section>
+
+  <section aria-labelledby="h-ble">
+    <h2 id="h-ble">2. Board connection (Bluetooth)</h2>
+    <div class="buttons">
+      <button id="connect" type="button">Connect Farah</button>
+      <button id="disconnect" type="button">Disconnect</button>
+      <button id="resend" type="button" hidden>Resend sync</button>
+    </div>
+    <p>State: <strong id="bleState">idle</strong></p>
+    <p id="bleHint" class="hint" role="status" aria-live="polite"></p>
+    <p id="bleStats" class="small"></p>
+    <p class="small">The page reports itself to the board as idle: no Farah backend, no session,
+      headset not verified. In idle the board handles its own face button locally (it shows
+      "Start a session on iPhone") and sends nothing to the phone, so this page does not exercise a
+      real button round-trip. Button answers are covered only by automated tests with simulated
+      presses; if a press ever does arrive, it is answered "not accepted" and starts nothing.</p>
+  </section>
+
+  <section aria-labelledby="h-audio">
+    <h2 id="h-audio">3. Audio test (keep the board connected)</h2>
+    <div class="buttons">
+      <button id="tone" type="button">Play quiet test tone</button>
+      <button id="record" type="button">Record (max 5 s)</button>
+      <button id="stop" type="button">Stop</button>
+      <button id="play" type="button">Play recording</button>
+      <button id="clear" type="button">Clear</button>
+    </div>
+    <p>State: <strong id="audioState">idle</strong></p>
+    <p id="clipInfo" class="small"></p>
+    <p id="audioNote" class="hint" role="status" aria-live="polite"></p>
+    <p class="small">Audio route: unknown. The page cannot see or verify where sound plays or which
+      microphone records, and it does not notice a headset disconnecting mid-test. Report what you
+      observed below. Leaving the page stops audio and clears the recording.</p>
+  </section>
+
+  <section aria-labelledby="h-results">
+    <h2 id="h-results">4. What you observed</h2>
+    <label>Test tone heard in
+      <select id="resTone">
+        <option>not tested</option><option>headphones</option><option>phone speaker</option>
+        <option>silent / not heard</option><option>unsure</option>
+      </select>
+    </label>
+    <label>Recording playback heard in
+      <select id="resPlayback">
+        <option>not tested</option><option>headphones</option><option>phone speaker</option>
+        <option>silent / not heard</option><option>unsure</option>
+      </select>
+    </label>
+    <label>Recording sounded
+      <select id="resQuality">
+        <option>not tested</option><option>clear</option><option>choppy or distorted</option>
+        <option>silent</option><option>unsure</option>
+      </select>
+    </label>
+    <label>Board screen after connecting
+      <select id="resBoard">
+        <option>not tested</option><option>showed idle (&quot;Start on iPhone&quot;)</option><option>stayed offline</option>
+        <option>showed an error</option><option>unsure</option>
+      </select>
+    </label>
+    <label>Board face button while connected
+      <select id="resButton">
+        <option>not tested</option><option>showed &quot;Start a session on iPhone&quot;</option>
+        <option>showed something else</option><option>log showed a button line</option><option>unsure</option>
+      </select>
+    </label>
+  </section>
+
+  <section aria-labelledby="h-export">
+    <h2 id="h-export">5. Diagnostic text (optional)</h2>
+    <p class="small">Text only: capabilities, counters, your choices and the event log. No audio,
+      credentials, Bluetooth device ids or names.</p>
+    <div class="buttons">
+      <button id="buildExport" type="button">Build text</button>
+      <button id="copyExport" type="button">Copy</button>
+    </div>
+    <textarea id="exportText" rows="8" readonly aria-label="Diagnostic text"></textarea>
+  </section>
+
+  <section aria-labelledby="h-log">
+    <h2 id="h-log">Event log</h2>
+    <ol id="log" class="log"></ol>
+  </section>
+
+  <script src="ble.js"></script>
+  <script src="link.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
